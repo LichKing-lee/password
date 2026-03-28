@@ -69,6 +69,11 @@ class WifiPasswordRepositoryTest {
 
         // assert
         assertThat(passwords).hasSize(2);
+        assertThat(passwords).allSatisfy(wp -> {
+            assertThat(wp.getStore()).isNotNull();
+            assertThat(wp.getStore().getName()).isEqualTo("이디야커피 선릉점");
+            assertThat(wp.getStore().getNaverPlaceId()).isEqualTo("naver-place-789");
+        });
     }
 
     @Test
