@@ -6,7 +6,8 @@
       "Bash(tar -xzf -)",
       "Bash(cp -r temp-init/gradle .)",
       "Bash(chmod +x gradlew)",
-      "Bash(./gradlew :password-api:build 2>&1)"
+      "Bash(./gradlew :password-api:build 2>&1)",
+      "Bash(./gradlew build:*)"
     ]
   }
 }
