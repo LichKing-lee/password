@@ -10,7 +10,11 @@
       "Bash(./gradlew build:*)",
       "Bash(./gradlew clean:*)",
       "Bash(xargs -I{} jar tf {})",
-      "Bash(./gradlew :password-domain:test 2>&1)"
+      "Bash(./gradlew :password-domain:test 2>&1)",
+      "Bash(./gradlew :password-domain:test --info)",
+      "Bash(./gradlew :password-domain:cleanTest :password-domain:test --info)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:central.sonatype.com)"
     ]
   }
 }
