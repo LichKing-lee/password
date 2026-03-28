@@ -2,6 +2,7 @@ package com.password.domain.wifi;
 
 import com.password.domain.store.Store;
 import com.password.domain.store.StoreRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -20,6 +21,9 @@ class WifiPasswordRepositoryTest {
     @Autowired
     private StoreRepository storeRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Test
     void 와이파이_비밀번호를_저장하고_조회한다() {
         // arrange
@@ -31,10 +35,11 @@ class WifiPasswordRepositoryTest {
                 new BigDecimal("127.0490000"),
                 "카페"
         ));
-        WifiPassword wifiPassword = new WifiPassword(store, "EDIYA_5G", "ediya1234");
+        WifiPassword saved = wifiPasswordRepository.save(new WifiPassword(store, "EDIYA_5G", "ediya1234"));
+        entityManager.flush();
+        entityManager.clear();
 
         // act
-        WifiPassword saved = wifiPasswordRepository.save(wifiPassword);
         WifiPassword found = wifiPasswordRepository.findById(saved.getId()).orElseThrow();
 
         // assert
@@ -56,6 +61,8 @@ class WifiPasswordRepositoryTest {
         ));
         wifiPasswordRepository.save(new WifiPassword(store, "EDIYA_2G", "ediya1234"));
         wifiPasswordRepository.save(new WifiPassword(store, "EDIYA_5G", "ediya5678"));
+        entityManager.flush();
+        entityManager.clear();
 
         // act
         List<WifiPassword> passwords = wifiPasswordRepository.findByStoreId(store.getId());
@@ -81,7 +88,8 @@ class WifiPasswordRepositoryTest {
 
         // act
         wifiPassword.updatePassword("new_password");
-        wifiPasswordRepository.flush();
+        entityManager.flush();
+        entityManager.clear();
 
         // assert
         WifiPassword found = wifiPasswordRepository.findById(wifiPassword.getId()).orElseThrow();

@@ -1,5 +1,6 @@
 package com.password.domain.store;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -15,6 +16,9 @@ class StoreRepositoryTest {
     @Autowired
     private StoreRepository storeRepository;
 
+    @Autowired
+    private EntityManager entityManager;
+
     @Test
     void 상점을_저장하고_ID로_조회한다() {
         // arrange
@@ -26,9 +30,11 @@ class StoreRepositoryTest {
                 new BigDecimal("127.0276368"),
                 "카페"
         );
+        Store saved = storeRepository.save(store);
+        entityManager.flush();
+        entityManager.clear();
 
         // act
-        Store saved = storeRepository.save(store);
         Optional<Store> found = storeRepository.findById(saved.getId());
 
         // assert
@@ -49,6 +55,8 @@ class StoreRepositoryTest {
                 "카페"
         );
         storeRepository.save(store);
+        entityManager.flush();
+        entityManager.clear();
 
         // act
         Optional<Store> found = storeRepository.findByNaverPlaceId("naver-place-456");
