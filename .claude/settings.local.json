@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(curl -s \"https://start.spring.io/starter.tgz?type=gradle-project&language=java&bootVersion=4.0.5&baseDir=temp-init&groupId=com.password&artifactId=password&name=password&description=Password%20sharing%20application&packageName=com.password&javaVersion=25&dependencies=web\")",
+      "Bash(tar -xzf -)",
+      "Bash(cp -r temp-init/gradle .)",
+      "Bash(chmod +x gradlew)",
+      "Bash(./gradlew :password-api:build 2>&1)"
+    ]
+  }
+}
