@@ -1,7 +1,3 @@
-plugins {
-    id("org.springframework.boot")
-}
-
 dependencies {
     implementation(project(":password-domain"))
     implementation("org.springframework.boot:spring-boot-starter-webmvc")

@@ -20,6 +20,8 @@
 - 각 모듈의 루트 패키지는 com.password.{모듈명} 으로 시작한다
 - 가장 초기에는 rest api 을 응답하는 api 모듈만 존재한다
 - JPA 관련 repository, entity 등은 domain 모듈에 위치한다
+- java bean 관련 메서드는 lombok 을 사용한다
+- spring 설정 파일은 yml 형식으로 작성한다
 
 ## 프로젝트 테스트 룰
 - 작성되는 코드는 모두 테스트 코드가 작성되어야 한다
@@ -27,3 +29,11 @@
 - spring context 를 사용하는 통합 테스트는 controller, repository 에 대해서만 작성한다
 - service 는 테스트 코드를 작성하지 않는다
 - mockito 와 같은 mock 라이브러리를 사용하지 않는다
+- 테스트 셋업은 @BeforeEach 애노테이션을 사용하지 않고 테스트 코드 내에서 직접 작성한다
+- 테스트 메서드만으로 테스트의 모든것을 확인하기 위함이다
+- 테스트 메서드 이름은 테스트의 목적이 드러나도록 한국어로 작성한다
+- 테스트 메서드 구현은 arrange-act-assert 패턴을 따른다
+
+## 프로젝트 개발 룰
+- JPA entity 들의 모든 연관관계는 무조건 LAZY 로 설정한다
+- 다만 연관관계가 걸려있는 entity 조회시 JPQL 을 사용하여 fetch join 을 통해 조회한다
