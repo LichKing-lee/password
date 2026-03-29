@@ -77,6 +77,30 @@ class WifiPasswordRepositoryTest {
     }
 
     @Test
+    void 개방형_와이파이를_저장하고_조회한다() {
+        // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-456",
+                "스타벅스 역삼점",
+                "서울시 강남구 역삼로 456",
+                new BigDecimal("37.5000000"),
+                new BigDecimal("127.0360000"),
+                "카페"
+        ));
+        WifiPassword saved = wifiPasswordRepository.save(new WifiPassword(store, "Starbucks_Free"));
+        entityManager.flush();
+        entityManager.clear();
+
+        // act
+        WifiPassword found = wifiPasswordRepository.findById(saved.getId()).orElseThrow();
+
+        // assert
+        assertThat(found.getSsid()).isEqualTo("Starbucks_Free");
+        assertThat(found.getPassword()).isNull();
+        assertThat(found.isOpen()).isTrue();
+    }
+
+    @Test
     void 와이파이_비밀번호를_수정한다() {
         // arrange
         Store store = storeRepository.save(new Store(

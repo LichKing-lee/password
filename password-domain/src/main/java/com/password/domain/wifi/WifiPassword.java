@@ -36,7 +36,7 @@ public class WifiPassword {
     @Column(name = "ssid")
     private String ssid;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -50,6 +50,14 @@ public class WifiPassword {
         this.ssid = ssid;
         this.password = password;
         this.createdAt = LocalDateTime.now();
+    }
+
+    public WifiPassword(Store store, String ssid) {
+        this(store, ssid, null);
+    }
+
+    public boolean isOpen() {
+        return password == null;
     }
 
     public void updatePassword(String password) {
