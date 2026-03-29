@@ -27,8 +27,7 @@ class StoreRepositoryTest {
                 "스타벅스 강남점",
                 "서울시 강남구 테헤란로 123",
                 new BigDecimal("37.4979462"),
-                new BigDecimal("127.0276368"),
-                "카페"
+                new BigDecimal("127.0276368")
         );
         Store saved = storeRepository.save(store);
         entityManager.flush();
@@ -51,8 +50,7 @@ class StoreRepositoryTest {
                 "투썸플레이스 역삼점",
                 "서울시 강남구 역삼동 456",
                 new BigDecimal("37.5000000"),
-                new BigDecimal("127.0360000"),
-                "카페"
+                new BigDecimal("127.0360000")
         );
         storeRepository.save(store);
         entityManager.flush();

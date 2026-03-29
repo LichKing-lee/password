@@ -1,13 +1,13 @@
-# WiFi Password API
+# WiFi API
 
-## 와이파이 비밀번호 등록
+## 와이파이 등록
 
-상점의 와이파이 비밀번호를 등록한다. 비밀번호가 없는 개방형 와이파이도 등록 가능하다.
+상점의 와이파이를 등록한다. 비밀번호가 없는 개방형 와이파이도 등록 가능하다.
 
 ### Request
 
 ```
-POST /api/wifi-passwords
+POST /api/wifis
 Content-Type: application/json
 ```
 
@@ -20,7 +20,6 @@ Content-Type: application/json
 | address | String | O | 주소 |
 | latitude | BigDecimal | O | 위도 |
 | longitude | BigDecimal | O | 경도 |
-| category | String | X | 상점 카테고리 |
 | ssid | String | O | 와이파이 SSID |
 | open | boolean | O | 개방형 여부 (true이면 password 무시) |
 | password | String | X | 와이파이 비밀번호 (open=true이면 무시됨) |
@@ -36,7 +35,6 @@ Content-Type: application/json
   "address": "서울시 강남구 선릉로 789",
   "latitude": 37.5045000,
   "longitude": 127.0490000,
-  "category": "카페",
   "ssid": "EDIYA_5G",
   "open": false,
   "password": "ediya1234"
@@ -52,7 +50,6 @@ Content-Type: application/json
   "address": "서울시 강남구 역삼로 456",
   "latitude": 37.5000000,
   "longitude": 127.0360000,
-  "category": "카페",
   "ssid": "Starbucks_Free",
   "open": true
 }
@@ -64,7 +61,7 @@ Content-Type: application/json
 
 | 필드 | 타입 | 설명 |
 |------|------|------|
-| wifiPasswordId | Long | 와이파이 비밀번호 ID |
+| wifiId | Long | 와이파이 ID |
 | storeId | Long | 상점 ID |
 | storeName | String | 상점명 |
 | ssid | String | 와이파이 SSID |
@@ -74,7 +71,7 @@ Content-Type: application/json
 
 ```json
 {
-  "wifiPasswordId": 1,
+  "wifiId": 1,
   "storeId": 1,
   "storeName": "이디야커피 선릉점",
   "ssid": "EDIYA_5G",

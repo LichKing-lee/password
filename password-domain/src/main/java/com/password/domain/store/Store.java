@@ -40,15 +40,11 @@ public class Store {
     @Column(name = "longitude", nullable = false, precision = 10, scale = 7)
     private BigDecimal longitude;
 
-    @Column(name = "category")
-    private String category;
-
-    public Store(String naverPlaceId, String name, String address, BigDecimal latitude, BigDecimal longitude, String category) {
+    public Store(String naverPlaceId, String name, String address, BigDecimal latitude, BigDecimal longitude) {
         this.naverPlaceId = naverPlaceId;
         this.name = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.category = category;
     }
 }

@@ -13,10 +13,10 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class WifiPasswordRepositoryTest {
+class WifiRepositoryTest {
 
     @Autowired
-    private WifiPasswordRepository wifiPasswordRepository;
+    private WifiRepository wifiRepository;
 
     @Autowired
     private StoreRepository storeRepository;
@@ -25,22 +25,21 @@ class WifiPasswordRepositoryTest {
     private EntityManager entityManager;
 
     @Test
-    void 와이파이_비밀번호를_저장하고_조회한다() {
+    void 와이파이를_저장하고_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
                 "naver-place-789",
                 "이디야커피 선릉점",
                 "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"),
-                new BigDecimal("127.0490000"),
-                "카페"
+                new BigDecimal("127.0490000")
         ));
-        WifiPassword saved = wifiPasswordRepository.save(new WifiPassword(store, "EDIYA_5G", "ediya1234"));
+        Wifi saved = wifiRepository.save(new Wifi(store, "EDIYA_5G", "ediya1234"));
         entityManager.flush();
         entityManager.clear();
 
         // act
-        WifiPassword found = wifiPasswordRepository.findById(saved.getId()).orElseThrow();
+        Wifi found = wifiRepository.findById(saved.getId()).orElseThrow();
 
         // assert
         assertThat(found.getSsid()).isEqualTo("EDIYA_5G");
@@ -49,30 +48,29 @@ class WifiPasswordRepositoryTest {
     }
 
     @Test
-    void 상점ID로_와이파이_비밀번호_목록을_조회한다() {
+    void 상점ID로_와이파이_목록을_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
                 "naver-place-789",
                 "이디야커피 선릉점",
                 "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"),
-                new BigDecimal("127.0490000"),
-                "카페"
+                new BigDecimal("127.0490000")
         ));
-        wifiPasswordRepository.save(new WifiPassword(store, "EDIYA_2G", "ediya1234"));
-        wifiPasswordRepository.save(new WifiPassword(store, "EDIYA_5G", "ediya5678"));
+        wifiRepository.save(new Wifi(store, "EDIYA_2G", "ediya1234"));
+        wifiRepository.save(new Wifi(store, "EDIYA_5G", "ediya5678"));
         entityManager.flush();
         entityManager.clear();
 
         // act
-        List<WifiPassword> passwords = wifiPasswordRepository.findByStoreId(store.getId());
+        List<Wifi> wifiList = wifiRepository.findByStoreId(store.getId());
 
         // assert
-        assertThat(passwords).hasSize(2);
-        assertThat(passwords).allSatisfy(wp -> {
-            assertThat(wp.getStore()).isNotNull();
-            assertThat(wp.getStore().getName()).isEqualTo("이디야커피 선릉점");
-            assertThat(wp.getStore().getNaverPlaceId()).isEqualTo("naver-place-789");
+        assertThat(wifiList).hasSize(2);
+        assertThat(wifiList).allSatisfy(wifi -> {
+            assertThat(wifi.getStore()).isNotNull();
+            assertThat(wifi.getStore().getName()).isEqualTo("이디야커피 선릉점");
+            assertThat(wifi.getStore().getNaverPlaceId()).isEqualTo("naver-place-789");
         });
     }
 
@@ -84,15 +82,14 @@ class WifiPasswordRepositoryTest {
                 "스타벅스 역삼점",
                 "서울시 강남구 역삼로 456",
                 new BigDecimal("37.5000000"),
-                new BigDecimal("127.0360000"),
-                "카페"
+                new BigDecimal("127.0360000")
         ));
-        WifiPassword saved = wifiPasswordRepository.save(new WifiPassword(store, "Starbucks_Free"));
+        Wifi saved = wifiRepository.save(new Wifi(store, "Starbucks_Free"));
         entityManager.flush();
         entityManager.clear();
 
         // act
-        WifiPassword found = wifiPasswordRepository.findById(saved.getId()).orElseThrow();
+        Wifi found = wifiRepository.findById(saved.getId()).orElseThrow();
 
         // assert
         assertThat(found.getSsid()).isEqualTo("Starbucks_Free");
@@ -108,20 +105,19 @@ class WifiPasswordRepositoryTest {
                 "이디야커피 선릉점",
                 "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"),
-                new BigDecimal("127.0490000"),
-                "카페"
+                new BigDecimal("127.0490000")
         ));
-        WifiPassword wifiPassword = wifiPasswordRepository.save(
-                new WifiPassword(store, "EDIYA_5G", "old_password")
+        Wifi wifi = wifiRepository.save(
+                new Wifi(store, "EDIYA_5G", "old_password")
         );
 
         // act
-        wifiPassword.updatePassword("new_password");
+        wifi.updatePassword("new_password");
         entityManager.flush();
         entityManager.clear();
 
         // assert
-        WifiPassword found = wifiPasswordRepository.findById(wifiPassword.getId()).orElseThrow();
+        Wifi found = wifiRepository.findById(wifi.getId()).orElseThrow();
         assertThat(found.getPassword()).isEqualTo("new_password");
         assertThat(found.getUpdatedAt()).isNotNull();
     }

@@ -18,15 +18,15 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "wifi_password")
+@Table(name = "wifi")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class WifiPassword {
+public class Wifi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "wifi_password_id")
+    @Column(name = "wifi_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,14 +45,14 @@ public class WifiPassword {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public WifiPassword(Store store, String ssid, String password) {
+    public Wifi(Store store, String ssid, String password) {
         this.store = store;
         this.ssid = ssid;
         this.password = password;
         this.createdAt = LocalDateTime.now();
     }
 
-    public WifiPassword(Store store, String ssid) {
+    public Wifi(Store store, String ssid) {
         this(store, ssid, null);
     }
 
