@@ -33,7 +33,7 @@ public class WifiPassword {
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @Column(name = "ssid")
+    @Column(name = "ssid", nullable = false)
     private String ssid;
 
     @Column(name = "password")
