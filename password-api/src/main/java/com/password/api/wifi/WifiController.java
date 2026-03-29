@@ -9,22 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/api/wifis")
 public class WifiController {
 
+    private final WifiService wifiService;
+
+    public WifiController(WifiService wifiService) {
+        this.wifiService = wifiService;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public WifiCreateResponse create(@RequestBody WifiCreateRequest request) {
-        return new WifiCreateResponse(
-                1L,
-                new WifiCreateResponse.StoreResponse(1L, request.store().name()),
-                request.ssid(),
-                request.open() ? null : request.password(),
-                request.open(),
-                LocalDateTime.now()
-        );
+        return wifiService.create(request);
     }
 }

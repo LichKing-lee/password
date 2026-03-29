@@ -15,7 +15,10 @@
       "Bash(./gradlew :password-domain:cleanTest :password-domain:test --info)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:central.sonatype.com)",
-      "Bash(./gradlew :password-domain:test --tests \"com.password.domain.wifi.WifiPasswordRepositoryTest\")"
+      "Bash(./gradlew :password-domain:test --tests \"com.password.domain.wifi.WifiPasswordRepositoryTest\")",
+      "Bash(./gradlew test:*)",
+      "Bash(jar tf:*)",
+      "Bash(./gradlew :password-api:test --tests \"com.password.api.wifi.WifiControllerTest\")"
     ]
   }
 }

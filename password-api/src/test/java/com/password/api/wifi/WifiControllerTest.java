@@ -2,22 +2,23 @@ package com.password.api.wifi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
+import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@WebMvcTest(WifiController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class WifiControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvcTester mockMvc;
 
     @Test
-    void 와이파이를_등록한다() throws Exception {
+    void 와이파이를_등록한다() {
         // arrange
         String request = """
                 {
@@ -34,22 +35,32 @@ class WifiControllerTest {
                 }
                 """;
 
-        // act & assert
-        mockMvc.perform(post("/api/wifis")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.wifiId").value(1))
-                .andExpect(jsonPath("$.store.storeId").value(1))
-                .andExpect(jsonPath("$.store.name").value("이디야커피 선릉점"))
-                .andExpect(jsonPath("$.ssid").value("EDIYA_5G"))
-                .andExpect(jsonPath("$.password").value("ediya1234"))
-                .andExpect(jsonPath("$.open").value(false))
-                .andExpect(jsonPath("$.createdAt").isNotEmpty());
+        // act
+        MvcTestResult result = mockMvc.post().uri("/api/wifis")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(201);
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifiId").asNumber().isNotNull();
+        assertThat(result).bodyJson()
+                .extractingPath("$.store.storeId").asNumber().isNotNull();
+        assertThat(result).bodyJson()
+                .extractingPath("$.store.name").asString().isEqualTo("이디야커피 선릉점");
+        assertThat(result).bodyJson()
+                .extractingPath("$.ssid").asString().isEqualTo("EDIYA_5G");
+        assertThat(result).bodyJson()
+                .extractingPath("$.password").asString().isEqualTo("ediya1234");
+        assertThat(result).bodyJson()
+                .extractingPath("$.open").asBoolean().isFalse();
+        assertThat(result).bodyJson()
+                .extractingPath("$.createdAt").asString().isNotEmpty();
     }
 
     @Test
-    void 개방형_와이파이를_등록한다() throws Exception {
+    void 개방형_와이파이를_등록한다() {
         // arrange
         String request = """
                 {
@@ -65,15 +76,23 @@ class WifiControllerTest {
                 }
                 """;
 
-        // act & assert
-        mockMvc.perform(post("/api/wifis")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(request))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.store.name").value("스타벅스 역삼점"))
-                .andExpect(jsonPath("$.ssid").value("Starbucks_Free"))
-                .andExpect(jsonPath("$.password").doesNotExist())
-                .andExpect(jsonPath("$.open").value(true))
-                .andExpect(jsonPath("$.createdAt").isNotEmpty());
+        // act
+        MvcTestResult result = mockMvc.post().uri("/api/wifis")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(201);
+        assertThat(result).bodyJson()
+                .extractingPath("$.store.name").asString().isEqualTo("스타벅스 역삼점");
+        assertThat(result).bodyJson()
+                .extractingPath("$.ssid").asString().isEqualTo("Starbucks_Free");
+        assertThat(result).bodyJson()
+                .extractingPath("$.password").isNull();
+        assertThat(result).bodyJson()
+                .extractingPath("$.open").asBoolean().isTrue();
+        assertThat(result).bodyJson()
+                .extractingPath("$.createdAt").asString().isNotEmpty();
     }
 }
