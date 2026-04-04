@@ -22,27 +22,11 @@ public class WifiService {
 
     @Transactional
     public WifiCreateResponse create(WifiCreateRequest request) {
-        Store store = storeRepository.findByNaverPlaceId(request.store().naverPlaceId())
-                .orElseGet(() -> storeRepository.save(new Store(
-                        request.store().naverPlaceId(),
-                        request.store().name(),
-                        request.store().address(),
-                        request.store().latitude(),
-                        request.store().longitude()
-                )));
+        Store store = storeRepository.findById(request.storeId())
+                .orElseThrow(() -> new IllegalArgumentException("Store not found: " + request.storeId()));
 
-        String password = request.open() ? null : request.password();
-        Wifi wifi = wifiRepository.save(
-                password == null ? new Wifi(store, request.ssid()) : new Wifi(store, request.ssid(), password)
-        );
+        Wifi wifi = wifiRepository.save(request.toEntity(store));
 
-        return new WifiCreateResponse(
-                wifi.getId(),
-                new WifiCreateResponse.StoreResponse(store.getId(), store.getName()),
-                wifi.getSsid(),
-                wifi.getPassword(),
-                wifi.isOpen(),
-                wifi.getCreatedAt()
-        );
+        return new WifiCreateResponse(wifi);
     }
 }

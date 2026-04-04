@@ -18,7 +18,15 @@
       "Bash(./gradlew :password-domain:test --tests \"com.password.domain.wifi.WifiPasswordRepositoryTest\")",
       "Bash(./gradlew test:*)",
       "Bash(jar tf:*)",
-      "Bash(./gradlew :password-api:test --tests \"com.password.api.wifi.WifiControllerTest\")"
+      "Bash(./gradlew :password-api:test --tests \"com.password.api.wifi.WifiControllerTest\")",
+      "Bash(./gradlew :password-api:test 2>&1)",
+      "Bash(./gradlew :password-api:test --info)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/changyonglee/programming/password/**)",
+      "Bash(done)",
+      "Bash(./gradlew :password-api:test --stacktrace)",
+      "Bash(cat password-api/build/test-results/test/*.xml)"
     ]
   }
 }

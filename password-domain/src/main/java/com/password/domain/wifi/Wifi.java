@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +20,6 @@ import java.time.LocalDateTime;
 @Table(name = "wifi")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class Wifi {
 
     @Id
@@ -45,15 +43,19 @@ public class Wifi {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Wifi(Store store, String ssid, String password) {
+    public static Wifi open(Store store, String ssid) {
+        return new Wifi(store, ssid, null);
+    }
+
+    public static Wifi secured(Store store, String ssid, String password) {
+        return new Wifi(store, ssid, password);
+    }
+
+    private Wifi(Store store, String ssid, String password) {
         this.store = store;
         this.ssid = ssid;
         this.password = password;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public Wifi(Store store, String ssid) {
-        this(store, ssid, null);
     }
 
     public boolean isOpen() {

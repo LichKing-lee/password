@@ -1,5 +1,7 @@
 package com.password.api.wifi;
 
+import com.password.domain.store.Store;
+import com.password.domain.store.StoreRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,23 +23,25 @@ class WifiControllerTest {
     @Autowired
     private MockMvcTester mockMvc;
 
+    @Autowired
+    private StoreRepository storeRepository;
+
     @Test
     void 와이파이를_등록한다() {
         // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-wifi-1", "이디야커피 선릉점", "서울시 강남구 선릉로 789",
+                new BigDecimal("37.5045000"), new BigDecimal("127.0490000")
+        ));
+
         String request = """
                 {
-                  "store": {
-                    "naverPlaceId": "naver-place-789",
-                    "name": "이디야커피 선릉점",
-                    "address": "서울시 강남구 선릉로 789",
-                    "latitude": 37.5045000,
-                    "longitude": 127.0490000
-                  },
+                  "storeId": %d,
                   "ssid": "EDIYA_5G",
                   "open": false,
                   "password": "ediya1234"
                 }
-                """;
+                """.formatted(store.getId());
 
         // act
         MvcTestResult result = mockMvc.post().uri("/api/wifis")
@@ -48,9 +54,7 @@ class WifiControllerTest {
         assertThat(result).bodyJson()
                 .extractingPath("$.wifiId").asNumber().isNotNull();
         assertThat(result).bodyJson()
-                .extractingPath("$.store.storeId").asNumber().isNotNull();
-        assertThat(result).bodyJson()
-                .extractingPath("$.store.name").asString().isEqualTo("이디야커피 선릉점");
+                .extractingPath("$.storeId").asNumber().isNotNull();
         assertThat(result).bodyJson()
                 .extractingPath("$.ssid").asString().isEqualTo("EDIYA_5G");
         assertThat(result).bodyJson()
@@ -64,19 +68,18 @@ class WifiControllerTest {
     @Test
     void 개방형_와이파이를_등록한다() {
         // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-wifi-2", "스타벅스 역삼점", "서울시 강남구 역삼로 456",
+                new BigDecimal("37.5000000"), new BigDecimal("127.0360000")
+        ));
+
         String request = """
                 {
-                  "store": {
-                    "naverPlaceId": "naver-place-456",
-                    "name": "스타벅스 역삼점",
-                    "address": "서울시 강남구 역삼로 456",
-                    "latitude": 37.5000000,
-                    "longitude": 127.0360000
-                  },
+                  "storeId": %d,
                   "ssid": "Starbucks_Free",
                   "open": true
                 }
-                """;
+                """.formatted(store.getId());
 
         // act
         MvcTestResult result = mockMvc.post().uri("/api/wifis")
@@ -87,7 +90,7 @@ class WifiControllerTest {
         // assert
         assertThat(result).hasStatus(201);
         assertThat(result).bodyJson()
-                .extractingPath("$.store.name").asString().isEqualTo("스타벅스 역삼점");
+                .extractingPath("$.storeId").asNumber().isNotNull();
         assertThat(result).bodyJson()
                 .extractingPath("$.ssid").asString().isEqualTo("Starbucks_Free");
         assertThat(result).bodyJson()

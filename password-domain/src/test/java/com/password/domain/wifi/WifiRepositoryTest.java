@@ -36,7 +36,7 @@ class WifiRepositoryTest {
                 new BigDecimal("37.5045000"),
                 new BigDecimal("127.0490000")
         ));
-        Wifi saved = wifiRepository.save(new Wifi(store, "EDIYA_5G", "ediya1234"));
+        Wifi saved = wifiRepository.save(Wifi.secured(store, "EDIYA_5G", "ediya1234"));
         entityManager.flush();
         entityManager.clear();
 
@@ -59,8 +59,8 @@ class WifiRepositoryTest {
                 new BigDecimal("37.5045000"),
                 new BigDecimal("127.0490000")
         ));
-        wifiRepository.save(new Wifi(store, "EDIYA_2G", "ediya1234"));
-        wifiRepository.save(new Wifi(store, "EDIYA_5G", "ediya5678"));
+        wifiRepository.save(Wifi.secured(store, "EDIYA_2G", "ediya1234"));
+        wifiRepository.save(Wifi.secured(store, "EDIYA_5G", "ediya5678"));
         entityManager.flush();
         entityManager.clear();
 
@@ -86,7 +86,7 @@ class WifiRepositoryTest {
                 new BigDecimal("37.5000000"),
                 new BigDecimal("127.0360000")
         ));
-        Wifi saved = wifiRepository.save(new Wifi(store, "Starbucks_Free"));
+        Wifi saved = wifiRepository.save(Wifi.open(store, "Starbucks_Free"));
         entityManager.flush();
         entityManager.clear();
 
@@ -110,7 +110,7 @@ class WifiRepositoryTest {
                 new BigDecimal("127.0490000")
         ));
         Wifi wifi = wifiRepository.save(
-                new Wifi(store, "EDIYA_5G", "old_password")
+                Wifi.secured(store, "EDIYA_5G", "old_password")
         );
 
         // act

@@ -1,20 +1,15 @@
 package com.password.api.wifi.dto;
 
-import java.math.BigDecimal;
+import com.password.domain.store.Store;
+import com.password.domain.wifi.Wifi;
 
 public record WifiCreateRequest(
-        StoreRequest store,
+        Long storeId,
         String ssid,
         boolean open,
         String password
 ) {
-
-    public record StoreRequest(
-            String naverPlaceId,
-            String name,
-            String address,
-            BigDecimal latitude,
-            BigDecimal longitude
-    ) {
+    public Wifi toEntity(Store store) {
+        return open ? Wifi.open(store, ssid) : Wifi.secured(store, ssid, password);
     }
 }
