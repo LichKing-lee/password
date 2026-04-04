@@ -42,3 +42,8 @@
   - API 스펙 정의
   - API 스펙에 따른 테스트 코드 작성
   - 테스트 코드가 통과하도록 API 구현
+
+## 프로젝트 예외 처리 룰
+- 프로젝트 root 예외 클래스 PasswordException 을 정의하며 com.password.exception 패키지에 위치한다
+- 각 모듈에서 발생하는 예외는 PasswordException 을 상속받아 정의한다
+- 공통 예외처리는 @RestControllerAdvice 를 사용하여 처리한다

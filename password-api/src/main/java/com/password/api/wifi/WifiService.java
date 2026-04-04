@@ -1,5 +1,6 @@
 package com.password.api.wifi;
 
+import com.password.api.exception.StoreNotFoundException;
 import com.password.api.wifi.dto.WifiCreateRequest;
 import com.password.api.wifi.dto.WifiCreateResponse;
 import com.password.domain.store.Store;
@@ -23,7 +24,7 @@ public class WifiService {
     @Transactional
     public WifiCreateResponse create(WifiCreateRequest request) {
         Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new IllegalArgumentException("Store not found: " + request.storeId()));
+                .orElseThrow(() -> new StoreNotFoundException(request.storeId()));
 
         Wifi wifi = wifiRepository.save(request.toEntity(store));
 

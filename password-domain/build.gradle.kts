@@ -7,8 +7,6 @@ tasks.named<Jar>("jar") {
 }
 
 dependencies {
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("com.github.gavlyukovskiy:p6spy-spring-boot-starter:2.0.0")
