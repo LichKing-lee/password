@@ -3,6 +3,7 @@ package com.password.api.wifi;
 import com.password.api.exception.StoreNotFoundException;
 import com.password.api.wifi.dto.WifiCreateRequest;
 import com.password.api.wifi.dto.WifiCreateResponse;
+import com.password.api.wifi.dto.WifiListResponse;
 import com.password.domain.store.Store;
 import com.password.domain.store.StoreRepository;
 import com.password.domain.wifi.Wifi;
@@ -29,5 +30,13 @@ public class WifiService {
         Wifi wifi = wifiRepository.save(request.toEntity(store));
 
         return new WifiCreateResponse(wifi);
+    }
+
+    @Transactional(readOnly = true)
+    public WifiListResponse searchWifis(Long storeId) {
+        var wifis = wifiRepository.findByStoreId(storeId).stream()
+                .map(WifiListResponse.WifiItem::new)
+                .toList();
+        return new WifiListResponse(wifis);
     }
 }

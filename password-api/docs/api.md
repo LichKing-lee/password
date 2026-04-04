@@ -126,3 +126,64 @@ Content-Type: application/json
   "createdAt": "2026-03-29T11:00:00"
 }
 ```
+
+---
+
+## 와이파이 조회
+
+상점의 와이파이 목록을 조회한다.
+
+### Request
+
+```
+GET /api/stores/{storeId}/wifis
+```
+
+#### Path Parameters
+
+| 필드    | 타입 | 필수 | 설명    |
+|---------|------|------|---------|
+| storeId | Long | O    | 상점 ID |
+
+#### 예시
+
+```
+GET /api/stores/1/wifis
+```
+
+### Response
+
+#### 성공 (200 OK)
+
+| 필드                  | 타입    | 설명                              |
+|-----------------------|---------|-----------------------------------|
+| wifis                 | Array   | 와이파이 목록                     |
+| wifis[].wifiId        | Long    | 와이파이 ID                       |
+| wifis[].storeId       | Long    | 상점 ID                           |
+| wifis[].ssid          | String  | 와이파이 SSID                     |
+| wifis[].password      | String  | 와이파이 비밀번호 (개방형이면 null)|
+| wifis[].open          | boolean | 개방형 여부                       |
+| wifis[].createdAt     | String  | 등록일시 (ISO 8601)               |
+
+```json
+{
+  "wifis": [
+    {
+      "wifiId": 1,
+      "storeId": 1,
+      "ssid": "EDIYA_5G",
+      "password": "ediya1234",
+      "open": false,
+      "createdAt": "2026-03-29T11:00:00"
+    },
+    {
+      "wifiId": 2,
+      "storeId": 1,
+      "ssid": "EDIYA_Free",
+      "password": null,
+      "open": true,
+      "createdAt": "2026-03-29T11:05:00"
+    }
+  ]
+}
+```

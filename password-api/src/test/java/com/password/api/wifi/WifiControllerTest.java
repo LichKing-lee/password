@@ -2,6 +2,8 @@ package com.password.api.wifi;
 
 import com.password.domain.store.Store;
 import com.password.domain.store.StoreRepository;
+import com.password.domain.wifi.Wifi;
+import com.password.domain.wifi.WifiRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +27,9 @@ class WifiControllerTest {
 
     @Autowired
     private StoreRepository storeRepository;
+
+    @Autowired
+    private WifiRepository wifiRepository;
 
     @Test
     void 와이파이를_등록한다() {
@@ -99,5 +104,42 @@ class WifiControllerTest {
                 .extractingPath("$.open").asBoolean().isTrue();
         assertThat(result).bodyJson()
                 .extractingPath("$.createdAt").asString().isNotEmpty();
+    }
+
+    @Test
+    void 상점의_와이파이_목록을_조회한다() {
+        // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-wifi-3", "투썸플레이스 강남점", "서울시 강남구 강남대로 123",
+                new BigDecimal("37.4980000"), new BigDecimal("127.0280000")
+        ));
+        wifiRepository.save(Wifi.secured(store, "TWOSOME_5G", "twosome1234"));
+        wifiRepository.save(Wifi.open(store, "TWOSOME_Free"));
+
+        // act
+        MvcTestResult result = mockMvc.get()
+                .uri("/api/stores/{storeId}/wifis", store.getId())
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(200);
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis.length()").asNumber().isEqualTo(2);
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[0].wifiId").asNumber().isNotNull();
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[0].storeId").asNumber().isNotNull();
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[0].ssid").asString().isEqualTo("TWOSOME_5G");
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[0].password").asString().isEqualTo("twosome1234");
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[0].open").asBoolean().isFalse();
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[0].createdAt").asString().isNotEmpty();
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[1].ssid").asString().isEqualTo("TWOSOME_Free");
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifis[1].open").asBoolean().isTrue();
     }
 }
