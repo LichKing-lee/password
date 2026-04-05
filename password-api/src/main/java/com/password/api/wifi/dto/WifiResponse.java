@@ -10,7 +10,8 @@ public record WifiResponse(
         String ssid,
         String password,
         boolean open,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
     public WifiResponse(Wifi wifi) {
         this(
@@ -19,7 +20,8 @@ public record WifiResponse(
                 wifi.getSsid(),
                 wifi.getPassword(),
                 wifi.isOpen(),
-                wifi.getCreatedAt()
+                wifi.getCreatedAt(),
+                wifi.getUpdatedAt()
         );
     }
 }

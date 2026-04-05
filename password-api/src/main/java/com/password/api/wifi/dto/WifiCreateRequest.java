@@ -4,7 +4,6 @@ import com.password.domain.store.Store;
 import com.password.domain.wifi.Wifi;
 
 public record WifiCreateRequest(
-        Long storeId,
         String ssid,
         boolean open,
         String password

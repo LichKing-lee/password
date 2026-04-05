@@ -67,15 +67,20 @@ Content-Type: application/json
 ### Request
 
 ```
-POST /api/wifis
+POST /api/stores/{storeId}/wifis
 Content-Type: application/json
 ```
+
+#### Path Parameters
+
+| 필드    | 타입 | 필수 | 설명    |
+|---------|------|------|---------|
+| storeId | Long | O    | 상점 ID |
 
 #### Body
 
 | 필드           | 타입       | 필수 | 설명                                |
 |----------------|------------|------|-------------------------------------|
-| storeId        | Long       | O    | 상점 ID                             |
 | ssid           | String     | O    | 와이파이 SSID                       |
 | open           | boolean    | O    | 개방형 여부 (true이면 password 무시)|
 | password       | String     | X    | 와이파이 비밀번호 (open=true이면 무시됨) |
@@ -86,7 +91,6 @@ Content-Type: application/json
 
 ```json
 {
-  "storeId": 1,
   "ssid": "EDIYA_5G",
   "open": false,
   "password": "ediya1234"
@@ -97,7 +101,6 @@ Content-Type: application/json
 
 ```json
 {
-  "storeId": 2,
   "ssid": "Starbucks_Free",
   "open": true
 }
@@ -197,15 +200,16 @@ GET /api/stores/1/wifis
 ### Request
 
 ```
-PATCH /api/wifis/{wifiId}
+PATCH /api/stores/{storeId}/wifis/{wifiId}
 Content-Type: application/json
 ```
 
 #### Path Parameters
 
-| 필드   | 타입 | 필수 | 설명        |
-|--------|------|------|-------------|
-| wifiId | Long | O    | 와이파이 ID |
+| 필드    | 타입 | 필수 | 설명        |
+|---------|------|------|-------------|
+| storeId | Long | O    | 상점 ID     |
+| wifiId  | Long | O    | 와이파이 ID |
 
 #### Body
 

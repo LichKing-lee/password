@@ -1,9 +1,12 @@
 package com.password.api.wifi;
 
 import com.password.api.exception.StoreNotFoundException;
+import com.password.api.exception.WifiNotFoundException;
 import com.password.api.wifi.dto.WifiCreateRequest;
 import com.password.api.wifi.dto.WifiCreateResponse;
 import com.password.api.wifi.dto.WifiListResponse;
+import com.password.api.wifi.dto.WifiResponse;
+import com.password.api.wifi.dto.WifiUpdateRequest;
 import com.password.domain.store.Store;
 import com.password.domain.store.StoreRepository;
 import com.password.domain.wifi.Wifi;
@@ -23,9 +26,9 @@ public class WifiService {
     }
 
     @Transactional
-    public WifiCreateResponse create(WifiCreateRequest request) {
-        Store store = storeRepository.findById(request.storeId())
-                .orElseThrow(() -> new StoreNotFoundException(request.storeId()));
+    public WifiCreateResponse create(Long storeId, WifiCreateRequest request) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new StoreNotFoundException(storeId));
 
         Wifi wifi = wifiRepository.save(request.toEntity(store));
 
@@ -38,5 +41,15 @@ public class WifiService {
                 .map(WifiListResponse.WifiItem::new)
                 .toList();
         return new WifiListResponse(wifis);
+    }
+
+    @Transactional
+    public WifiResponse update(Long wifiId, WifiUpdateRequest request) {
+        Wifi wifi = wifiRepository.findByIdWithStore(wifiId)
+                .orElseThrow(() -> new WifiNotFoundException(wifiId));
+
+        wifi.updatePassword(request.open() ? null : request.password());
+
+        return new WifiResponse(wifi);
     }
 }

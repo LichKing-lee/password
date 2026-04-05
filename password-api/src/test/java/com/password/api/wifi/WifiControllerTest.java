@@ -41,15 +41,15 @@ class WifiControllerTest {
 
         String request = """
                 {
-                  "storeId": %d,
                   "ssid": "EDIYA_5G",
                   "open": false,
                   "password": "ediya1234"
                 }
-                """.formatted(store.getId());
+                """;
 
         // act
-        MvcTestResult result = mockMvc.post().uri("/api/wifis")
+        MvcTestResult result = mockMvc.post()
+                .uri("/api/stores/{storeId}/wifis", store.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
                 .exchange();
@@ -80,14 +80,14 @@ class WifiControllerTest {
 
         String request = """
                 {
-                  "storeId": %d,
                   "ssid": "Starbucks_Free",
                   "open": true
                 }
-                """.formatted(store.getId());
+                """;
 
         // act
-        MvcTestResult result = mockMvc.post().uri("/api/wifis")
+        MvcTestResult result = mockMvc.post()
+                .uri("/api/stores/{storeId}/wifis", store.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
                 .exchange();
@@ -124,7 +124,7 @@ class WifiControllerTest {
 
         // act
         MvcTestResult result = mockMvc.patch()
-                .uri("/api/wifis/{wifiId}", wifi.getId())
+                .uri("/api/stores/{storeId}/wifis/{wifiId}", store.getId(), wifi.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
                 .exchange();
@@ -132,9 +132,9 @@ class WifiControllerTest {
         // assert
         assertThat(result).hasStatus(200);
         assertThat(result).bodyJson()
-                .extractingPath("$.wifiId").asNumber().isEqualTo(wifi.getId());
+                .extractingPath("$.wifiId").asNumber().isEqualTo(wifi.getId().intValue());
         assertThat(result).bodyJson()
-                .extractingPath("$.storeId").asNumber().isEqualTo(store.getId());
+                .extractingPath("$.storeId").asNumber().isEqualTo(store.getId().intValue());
         assertThat(result).bodyJson()
                 .extractingPath("$.ssid").asString().isEqualTo("EDIYA_5G");
         assertThat(result).bodyJson()
@@ -164,7 +164,7 @@ class WifiControllerTest {
 
         // act
         MvcTestResult result = mockMvc.patch()
-                .uri("/api/wifis/{wifiId}", wifi.getId())
+                .uri("/api/stores/{storeId}/wifis/{wifiId}", store.getId(), wifi.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
                 .exchange();
@@ -172,7 +172,7 @@ class WifiControllerTest {
         // assert
         assertThat(result).hasStatus(200);
         assertThat(result).bodyJson()
-                .extractingPath("$.wifiId").asNumber().isEqualTo(wifi.getId());
+                .extractingPath("$.wifiId").asNumber().isEqualTo(wifi.getId().intValue());
         assertThat(result).bodyJson()
                 .extractingPath("$.password").isNull();
         assertThat(result).bodyJson()
@@ -193,7 +193,7 @@ class WifiControllerTest {
 
         // act
         MvcTestResult result = mockMvc.patch()
-                .uri("/api/wifis/{wifiId}", 999999L)
+                .uri("/api/stores/{storeId}/wifis/{wifiId}", 999999L, 999999L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
                 .exchange();
