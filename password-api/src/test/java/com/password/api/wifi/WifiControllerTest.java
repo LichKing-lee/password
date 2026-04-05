@@ -107,6 +107,104 @@ class WifiControllerTest {
     }
 
     @Test
+    void 와이파이_비밀번호를_수정한다() {
+        // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-wifi-update-1", "이디야커피 선릉점", "서울시 강남구 선릉로 789",
+                new BigDecimal("37.5045000"), new BigDecimal("127.0490000")
+        ));
+        Wifi wifi = wifiRepository.save(Wifi.secured(store, "EDIYA_5G", "ediya1234"));
+
+        String request = """
+                {
+                  "open": false,
+                  "password": "newPassword123"
+                }
+                """;
+
+        // act
+        MvcTestResult result = mockMvc.patch()
+                .uri("/api/wifis/{wifiId}", wifi.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(200);
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifiId").asNumber().isEqualTo(wifi.getId());
+        assertThat(result).bodyJson()
+                .extractingPath("$.storeId").asNumber().isEqualTo(store.getId());
+        assertThat(result).bodyJson()
+                .extractingPath("$.ssid").asString().isEqualTo("EDIYA_5G");
+        assertThat(result).bodyJson()
+                .extractingPath("$.password").asString().isEqualTo("newPassword123");
+        assertThat(result).bodyJson()
+                .extractingPath("$.open").asBoolean().isFalse();
+        assertThat(result).bodyJson()
+                .extractingPath("$.createdAt").asString().isNotEmpty();
+        assertThat(result).bodyJson()
+                .extractingPath("$.updatedAt").asString().isNotEmpty();
+    }
+
+    @Test
+    void 와이파이를_개방형으로_변경한다() {
+        // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-wifi-update-2", "스타벅스 역삼점", "서울시 강남구 역삼로 456",
+                new BigDecimal("37.5000000"), new BigDecimal("127.0360000")
+        ));
+        Wifi wifi = wifiRepository.save(Wifi.secured(store, "Starbucks_5G", "starbucks1234"));
+
+        String request = """
+                {
+                  "open": true
+                }
+                """;
+
+        // act
+        MvcTestResult result = mockMvc.patch()
+                .uri("/api/wifis/{wifiId}", wifi.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(200);
+        assertThat(result).bodyJson()
+                .extractingPath("$.wifiId").asNumber().isEqualTo(wifi.getId());
+        assertThat(result).bodyJson()
+                .extractingPath("$.password").isNull();
+        assertThat(result).bodyJson()
+                .extractingPath("$.open").asBoolean().isTrue();
+        assertThat(result).bodyJson()
+                .extractingPath("$.updatedAt").asString().isNotEmpty();
+    }
+
+    @Test
+    void 존재하지_않는_와이파이를_수정하면_예외가_발생한다() {
+        // arrange
+        String request = """
+                {
+                  "open": false,
+                  "password": "newPassword123"
+                }
+                """;
+
+        // act
+        MvcTestResult result = mockMvc.patch()
+                .uri("/api/wifis/{wifiId}", 999999L)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(400);
+        assertThat(result).bodyJson()
+                .extractingPath("$.message").asString().isEqualTo("존재하지 않는 와이파이입니다.");
+    }
+
+    @Test
     void 상점의_와이파이_목록을_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
