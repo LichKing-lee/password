@@ -26,7 +26,8 @@
       "Read(//Users/changyonglee/programming/password/**)",
       "Bash(done)",
       "Bash(./gradlew :password-api:test --stacktrace)",
-      "Bash(cat password-api/build/test-results/test/*.xml)"
+      "Bash(cat password-api/build/test-results/test/*.xml)",
+      "Bash(grep -E \"\\\\.\\(java|kt|sql\\)$\")"
     ]
   }
 }

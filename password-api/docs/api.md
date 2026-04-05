@@ -187,3 +187,82 @@ GET /api/stores/1/wifis
   ]
 }
 ```
+
+---
+
+## 와이파이 수정
+
+와이파이 비밀번호를 수정한다. 비밀번호를 null로 설정하면 개방형으로 변경된다.
+
+### Request
+
+```
+PATCH /api/wifis/{wifiId}
+Content-Type: application/json
+```
+
+#### Path Parameters
+
+| 필드   | 타입 | 필수 | 설명        |
+|--------|------|------|-------------|
+| wifiId | Long | O    | 와이파이 ID |
+
+#### Body
+
+| 필드     | 타입    | 필수 | 설명                                     |
+|----------|---------|------|------------------------------------------|
+| open     | boolean | O    | 개방형 여부 (true이면 password 무시)     |
+| password | String  | X    | 새 비밀번호 (open=true이면 무시됨)       |
+
+#### 예시
+
+비밀번호 변경:
+
+```json
+{
+  "open": false,
+  "password": "newPassword123"
+}
+```
+
+개방형으로 변경:
+
+```json
+{
+  "open": true
+}
+```
+
+### Response
+
+#### 성공 (200 OK)
+
+| 필드      | 타입    | 설명                               |
+|-----------|---------|------------------------------------|
+| wifiId    | Long    | 와이파이 ID                        |
+| storeId   | Long    | 상점 ID                            |
+| ssid      | String  | 와이파이 SSID                      |
+| password  | String  | 와이파이 비밀번호 (개방형이면 null) |
+| open      | boolean | 개방형 여부                        |
+| createdAt | String  | 등록일시 (ISO 8601)                |
+| updatedAt | String  | 수정일시 (ISO 8601)                |
+
+```json
+{
+  "wifiId": 1,
+  "storeId": 1,
+  "ssid": "EDIYA_5G",
+  "password": "newPassword123",
+  "open": false,
+  "createdAt": "2026-03-29T11:00:00",
+  "updatedAt": "2026-04-05T14:30:00"
+}
+```
+
+#### 실패 — 존재하지 않는 와이파이 (400 Bad Request)
+
+```json
+{
+  "message": "존재하지 않는 와이파이입니다."
+}
+```
