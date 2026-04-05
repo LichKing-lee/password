@@ -14,4 +14,6 @@ public interface WifiRepository extends JpaRepository<Wifi, Long> {
 
     @Query("SELECT w FROM Wifi w JOIN FETCH w.store WHERE w.id = :wifiId")
     Optional<Wifi> findByIdWithStore(@Param("wifiId") Long wifiId);
+
+    void deleteByStoreId(Long storeId);
 }

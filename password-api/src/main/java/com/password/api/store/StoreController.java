@@ -3,6 +3,8 @@ package com.password.api.store;
 import com.password.api.store.dto.StoreCreateRequest;
 import com.password.api.store.dto.StoreCreateResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +25,11 @@ public class StoreController {
     @ResponseStatus(HttpStatus.CREATED)
     public StoreCreateResponse create(@RequestBody StoreCreateRequest request) {
         return storeService.create(request);
+    }
+
+    @DeleteMapping("/{storeId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long storeId) {
+        storeService.delete(storeId);
     }
 }

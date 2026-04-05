@@ -1,5 +1,9 @@
 package com.password.api.store;
 
+import com.password.domain.store.Store;
+import com.password.domain.store.StoreRepository;
+import com.password.domain.wifi.Wifi;
+import com.password.domain.wifi.WifiRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +24,12 @@ class StoreControllerTest {
 
     @Autowired
     private MockMvcTester mockMvc;
+
+    @Autowired
+    private StoreRepository storeRepository;
+
+    @Autowired
+    private WifiRepository wifiRepository;
 
     @Test
     void 상점을_등록한다() {
@@ -83,5 +95,39 @@ class StoreControllerTest {
         assertThat(second).hasStatus(201);
         assertThat(second).bodyJson()
                 .isEqualTo(first.getResponse().getContentAsString());
+    }
+
+    @Test
+    void 상점을_삭제한다() {
+        // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-delete-1", "할리스커피 강남점", "서울시 강남구 강남대로 200",
+                new BigDecimal("37.4970000"), new BigDecimal("127.0280000")
+        ));
+        wifiRepository.save(Wifi.secured(store, "HOLLYS_5G", "hollys1234"));
+        wifiRepository.save(Wifi.open(store, "HOLLYS_Free"));
+
+        // act
+        MvcTestResult result = mockMvc.delete()
+                .uri("/api/stores/{storeId}", store.getId())
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(204);
+        assertThat(storeRepository.findById(store.getId())).isEmpty();
+        assertThat(wifiRepository.findByStoreId(store.getId())).isEmpty();
+    }
+
+    @Test
+    void 존재하지_않는_상점을_삭제하면_예외가_발생한다() {
+        // act
+        MvcTestResult result = mockMvc.delete()
+                .uri("/api/stores/{storeId}", 999999L)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(400);
+        assertThat(result).bodyJson()
+                .extractingPath("$.message").asString().isEqualTo("존재하지 않는 상점입니다.");
     }
 }

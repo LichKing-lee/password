@@ -59,6 +59,38 @@ Content-Type: application/json
 
 ---
 
+## 상점 삭제
+
+등록된 상점을 삭제한다. 해당 상점에 등록된 와이파이도 함께 삭제된다.
+
+### Request
+
+```
+DELETE /api/stores/{storeId}
+```
+
+#### Path Parameters
+
+| 필드    | 타입 | 필수 | 설명    |
+|---------|------|------|---------|
+| storeId | Long | O    | 상점 ID |
+
+### Response
+
+#### 성공 (204 No Content)
+
+응답 본문 없음
+
+#### 실패 — 존재하지 않는 상점 (400 Bad Request)
+
+```json
+{
+  "message": "존재하지 않는 상점입니다."
+}
+```
+
+---
+
 ## 와이파이 등록
 
 상점의 와이파이를 등록한다. 비밀번호가 없는 개방형 와이파이도 등록 가능하다.
