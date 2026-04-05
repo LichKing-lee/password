@@ -6,6 +6,7 @@ import com.password.api.wifi.dto.WifiListResponse;
 import com.password.api.wifi.dto.WifiResponse;
 import com.password.api.wifi.dto.WifiUpdateRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,5 +40,11 @@ public class WifiController {
     @PatchMapping("/stores/{storeId}/wifis/{wifiId}")
     public WifiResponse update(@PathVariable Long storeId, @PathVariable Long wifiId, @RequestBody WifiUpdateRequest request) {
         return wifiService.update(wifiId, request);
+    }
+
+    @DeleteMapping("/stores/{storeId}/wifis/{wifiId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long storeId, @PathVariable Long wifiId) {
+        wifiService.delete(wifiId);
     }
 }

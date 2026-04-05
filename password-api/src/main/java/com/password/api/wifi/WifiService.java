@@ -52,4 +52,12 @@ public class WifiService {
 
         return new WifiResponse(wifi);
     }
+
+    @Transactional
+    public void delete(Long wifiId) {
+        Wifi wifi = wifiRepository.findById(wifiId)
+                .orElseThrow(() -> new WifiNotFoundException(wifiId));
+
+        wifiRepository.delete(wifi);
+    }
 }

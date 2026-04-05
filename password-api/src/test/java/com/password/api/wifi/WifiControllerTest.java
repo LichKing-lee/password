@@ -205,6 +205,38 @@ class WifiControllerTest {
     }
 
     @Test
+    void 와이파이를_삭제한다() {
+        // arrange
+        Store store = storeRepository.save(new Store(
+                "naver-place-wifi-delete-1", "할리스커피 삼성점", "서울시 강남구 삼성로 100",
+                new BigDecimal("37.5100000"), new BigDecimal("127.0600000")
+        ));
+        Wifi wifi = wifiRepository.save(Wifi.secured(store, "HOLLYS_5G", "hollys1234"));
+
+        // act
+        MvcTestResult result = mockMvc.delete()
+                .uri("/api/stores/{storeId}/wifis/{wifiId}", store.getId(), wifi.getId())
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(204);
+        assertThat(wifiRepository.findById(wifi.getId())).isEmpty();
+    }
+
+    @Test
+    void 존재하지_않는_와이파이를_삭제하면_예외가_발생한다() {
+        // act
+        MvcTestResult result = mockMvc.delete()
+                .uri("/api/stores/{storeId}/wifis/{wifiId}", 999999L, 999999L)
+                .exchange();
+
+        // assert
+        assertThat(result).hasStatus(400);
+        assertThat(result).bodyJson()
+                .extractingPath("$.message").asString().isEqualTo("존재하지 않는 와이파이입니다.");
+    }
+
+    @Test
     void 상점의_와이파이_목록을_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(

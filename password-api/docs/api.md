@@ -270,3 +270,36 @@ Content-Type: application/json
   "message": "존재하지 않는 와이파이입니다."
 }
 ```
+
+---
+
+## 와이파이 삭제
+
+등록된 와이파이를 삭제한다.
+
+### Request
+
+```
+DELETE /api/stores/{storeId}/wifis/{wifiId}
+```
+
+#### Path Parameters
+
+| 필드    | 타입 | 필수 | 설명        |
+|---------|------|------|-------------|
+| storeId | Long | O    | 상점 ID     |
+| wifiId  | Long | O    | 와이파이 ID |
+
+### Response
+
+#### 성공 (204 No Content)
+
+응답 본문 없음
+
+#### 실패 — 존재하지 않는 와이파이 (400 Bad Request)
+
+```json
+{
+  "message": "존재하지 않는 와이파이입니다."
+}
+```
