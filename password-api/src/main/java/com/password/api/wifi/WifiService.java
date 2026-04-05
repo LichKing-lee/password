@@ -2,6 +2,7 @@ package com.password.api.wifi;
 
 import com.password.api.exception.StoreNotFoundException;
 import com.password.api.exception.WifiNotFoundException;
+import com.password.api.exception.WifiStoreNotMatchException;
 import com.password.api.wifi.dto.WifiCreateRequest;
 import com.password.api.wifi.dto.WifiCreateResponse;
 import com.password.api.wifi.dto.WifiListResponse;
@@ -44,9 +45,11 @@ public class WifiService {
     }
 
     @Transactional
-    public WifiResponse update(Long wifiId, WifiUpdateRequest request) {
+    public WifiResponse update(Long storeId, Long wifiId, WifiUpdateRequest request) {
         Wifi wifi = wifiRepository.findByIdWithStore(wifiId)
                 .orElseThrow(() -> new WifiNotFoundException(wifiId));
+
+        validateWifiBelongsToStore(wifi, storeId);
 
         wifi.updatePassword(request.open() ? null : request.password());
 
@@ -54,10 +57,18 @@ public class WifiService {
     }
 
     @Transactional
-    public void delete(Long wifiId) {
-        Wifi wifi = wifiRepository.findById(wifiId)
+    public void delete(Long storeId, Long wifiId) {
+        Wifi wifi = wifiRepository.findByIdWithStore(wifiId)
                 .orElseThrow(() -> new WifiNotFoundException(wifiId));
 
+        validateWifiBelongsToStore(wifi, storeId);
+
         wifiRepository.delete(wifi);
+    }
+
+    private void validateWifiBelongsToStore(Wifi wifi, Long storeId) {
+        if (!wifi.getStore().getId().equals(storeId)) {
+            throw new WifiStoreNotMatchException(wifi.getId(), storeId);
+        }
     }
 }

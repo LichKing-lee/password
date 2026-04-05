@@ -39,12 +39,12 @@ public class WifiController {
 
     @PatchMapping("/stores/{storeId}/wifis/{wifiId}")
     public WifiResponse update(@PathVariable Long storeId, @PathVariable Long wifiId, @RequestBody WifiUpdateRequest request) {
-        return wifiService.update(wifiId, request);
+        return wifiService.update(storeId, wifiId, request);
     }
 
     @DeleteMapping("/stores/{storeId}/wifis/{wifiId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long storeId, @PathVariable Long wifiId) {
-        wifiService.delete(wifiId);
+        wifiService.delete(storeId, wifiId);
     }
 }
