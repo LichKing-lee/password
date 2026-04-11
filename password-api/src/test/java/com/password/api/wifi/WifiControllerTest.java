@@ -35,7 +35,7 @@ class WifiControllerTest {
     void 와이파이를_등록한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-wifi-1", "이디야커피 선릉점", "서울시 강남구 선릉로 789",
+                "이디야커피 선릉점", "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"), new BigDecimal("127.0490000")
         ));
 
@@ -74,7 +74,7 @@ class WifiControllerTest {
     void 개방형_와이파이를_등록한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-wifi-2", "스타벅스 역삼점", "서울시 강남구 역삼로 456",
+                "스타벅스 역삼점", "서울시 강남구 역삼로 456",
                 new BigDecimal("37.5000000"), new BigDecimal("127.0360000")
         ));
 
@@ -110,7 +110,7 @@ class WifiControllerTest {
     void 와이파이_비밀번호를_수정한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-wifi-update-1", "이디야커피 선릉점", "서울시 강남구 선릉로 789",
+                "이디야커피 선릉점", "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"), new BigDecimal("127.0490000")
         ));
         Wifi wifi = wifiRepository.save(Wifi.secured(store, "EDIYA_5G", "ediya1234"));
@@ -151,7 +151,7 @@ class WifiControllerTest {
     void 와이파이를_개방형으로_변경한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-wifi-update-2", "스타벅스 역삼점", "서울시 강남구 역삼로 456",
+                "스타벅스 역삼점", "서울시 강남구 역삼로 456",
                 new BigDecimal("37.5000000"), new BigDecimal("127.0360000")
         ));
         Wifi wifi = wifiRepository.save(Wifi.secured(store, "Starbucks_5G", "starbucks1234"));
@@ -208,7 +208,7 @@ class WifiControllerTest {
     void 와이파이를_삭제한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-wifi-delete-1", "할리스커피 삼성점", "서울시 강남구 삼성로 100",
+                "할리스커피 삼성점", "서울시 강남구 삼성로 100",
                 new BigDecimal("37.5100000"), new BigDecimal("127.0600000")
         ));
         Wifi wifi = wifiRepository.save(Wifi.secured(store, "HOLLYS_5G", "hollys1234"));
@@ -240,7 +240,7 @@ class WifiControllerTest {
     void 상점의_와이파이_목록을_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-wifi-3", "투썸플레이스 강남점", "서울시 강남구 강남대로 123",
+                "투썸플레이스 강남점", "서울시 강남구 강남대로 123",
                 new BigDecimal("37.4980000"), new BigDecimal("127.0280000")
         ));
         wifiRepository.save(Wifi.secured(store, "TWOSOME_5G", "twosome1234"));

@@ -25,7 +25,6 @@ class StoreRepositoryTest {
     void 상점을_저장하고_ID로_조회한다() {
         // arrange
         Store store = new Store(
-                "naver-place-123",
                 "스타벅스 강남점",
                 "서울시 강남구 테헤란로 123",
                 new BigDecimal("37.4979462"),
@@ -41,14 +40,12 @@ class StoreRepositoryTest {
         // assert
         assertThat(found).isPresent();
         assertThat(found.get().getName()).isEqualTo("스타벅스 강남점");
-        assertThat(found.get().getNaverPlaceId()).isEqualTo("naver-place-123");
     }
 
     @Test
-    void 네이버_플레이스ID로_조회한다() {
+    void 이름과_위경도로_조회한다() {
         // arrange
         Store store = new Store(
-                "naver-place-456",
                 "투썸플레이스 역삼점",
                 "서울시 강남구 역삼동 456",
                 new BigDecimal("37.5000000"),
@@ -59,7 +56,11 @@ class StoreRepositoryTest {
         entityManager.clear();
 
         // act
-        Optional<Store> found = storeRepository.findByNaverPlaceId("naver-place-456");
+        Optional<Store> found = storeRepository.findByNameAndLatitudeAndLongitude(
+                "투썸플레이스 역삼점",
+                new BigDecimal("37.5000000"),
+                new BigDecimal("127.0360000")
+        );
 
         // assert
         assertThat(found).isPresent();
@@ -67,9 +68,13 @@ class StoreRepositoryTest {
     }
 
     @Test
-    void 존재하지_않는_네이버_플레이스ID로_조회하면_빈값을_반환한다() {
+    void 존재하지_않는_이름과_위경도로_조회하면_빈값을_반환한다() {
         // act
-        Optional<Store> found = storeRepository.findByNaverPlaceId("non-existent");
+        Optional<Store> found = storeRepository.findByNameAndLatitudeAndLongitude(
+                "존재하지않는상점",
+                new BigDecimal("0.0000000"),
+                new BigDecimal("0.0000000")
+        );
 
         // assert
         assertThat(found).isEmpty();

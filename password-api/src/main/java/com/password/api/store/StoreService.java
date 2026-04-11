@@ -22,7 +22,7 @@ public class StoreService {
 
     @Transactional
     public StoreCreateResponse create(StoreCreateRequest request) {
-        Store store = storeRepository.findByNaverPlaceId(request.naverPlaceId())
+        Store store = storeRepository.findByNameAndLatitudeAndLongitude(request.name(), request.latitude(), request.longitude())
                 .orElseGet(() -> storeRepository.save(request.toEntity()));
 
         return new StoreCreateResponse(store);

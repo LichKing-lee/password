@@ -36,7 +36,6 @@ class StoreControllerTest {
         // arrange
         String request = """
                 {
-                  "naverPlaceId": "naver-place-789",
                   "name": "이디야커피 선릉점",
                   "address": "서울시 강남구 선릉로 789",
                   "latitude": 37.5045000,
@@ -55,8 +54,6 @@ class StoreControllerTest {
         assertThat(result).bodyJson()
                 .extractingPath("$.storeId").asNumber().isNotNull();
         assertThat(result).bodyJson()
-                .extractingPath("$.naverPlaceId").asString().isEqualTo("naver-place-789");
-        assertThat(result).bodyJson()
                 .extractingPath("$.name").asString().isEqualTo("이디야커피 선릉점");
         assertThat(result).bodyJson()
                 .extractingPath("$.address").asString().isEqualTo("서울시 강남구 선릉로 789");
@@ -71,7 +68,6 @@ class StoreControllerTest {
         // arrange
         String request = """
                 {
-                  "naverPlaceId": "naver-place-duplicate",
                   "name": "스타벅스 역삼점",
                   "address": "서울시 강남구 역삼로 456",
                   "latitude": 37.5000000,
@@ -101,7 +97,7 @@ class StoreControllerTest {
     void 상점을_삭제한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-delete-1", "할리스커피 강남점", "서울시 강남구 강남대로 200",
+                "할리스커피 강남점", "서울시 강남구 강남대로 200",
                 new BigDecimal("37.4970000"), new BigDecimal("127.0280000")
         ));
         wifiRepository.save(Wifi.secured(store, "HOLLYS_5G", "hollys1234"));

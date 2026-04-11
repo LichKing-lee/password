@@ -25,9 +25,6 @@ public class Store {
     @Column(name = "store_id")
     private Long id;
 
-    @Column(name = "naver_place_id", nullable = false, unique = true)
-    private String naverPlaceId;
-
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -40,8 +37,7 @@ public class Store {
     @Column(name = "longitude", nullable = false, precision = 10, scale = 7)
     private BigDecimal longitude;
 
-    public Store(String naverPlaceId, String name, String address, BigDecimal latitude, BigDecimal longitude) {
-        this.naverPlaceId = naverPlaceId;
+    public Store(String name, String address, BigDecimal latitude, BigDecimal longitude) {
         this.name = name;
         this.address = address;
         this.latitude = latitude;

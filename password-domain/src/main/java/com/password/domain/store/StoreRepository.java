@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    Optional<Store> findByNaverPlaceId(String naverPlaceId);
+    Optional<Store> findByNameAndLatitudeAndLongitude(String name, java.math.BigDecimal latitude, java.math.BigDecimal longitude);
 }

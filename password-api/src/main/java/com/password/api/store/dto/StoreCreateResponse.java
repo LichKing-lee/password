@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 
 public record StoreCreateResponse(
         Long storeId,
-        String naverPlaceId,
         String name,
         String address,
         BigDecimal latitude,
@@ -15,7 +14,6 @@ public record StoreCreateResponse(
     public StoreCreateResponse(Store store) {
         this(
                 store.getId(),
-                store.getNaverPlaceId(),
                 store.getName(),
                 store.getAddress(),
                 store.getLatitude(),

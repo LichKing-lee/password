@@ -30,7 +30,7 @@ class WifiRepositoryTest {
     void 와이파이를_저장하고_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-789",
+
                 "이디야커피 선릉점",
                 "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"),
@@ -53,7 +53,7 @@ class WifiRepositoryTest {
     void 상점ID로_와이파이_목록을_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-789",
+
                 "이디야커피 선릉점",
                 "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"),
@@ -72,7 +72,7 @@ class WifiRepositoryTest {
         assertThat(wifiList).allSatisfy(wifi -> {
             assertThat(wifi.getStore()).isNotNull();
             assertThat(wifi.getStore().getName()).isEqualTo("이디야커피 선릉점");
-            assertThat(wifi.getStore().getNaverPlaceId()).isEqualTo("naver-place-789");
+            assertThat(wifi.getStore().getAddress()).isEqualTo("서울시 강남구 선릉로 789");
         });
     }
 
@@ -80,7 +80,7 @@ class WifiRepositoryTest {
     void 개방형_와이파이를_저장하고_조회한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-456",
+
                 "스타벅스 역삼점",
                 "서울시 강남구 역삼로 456",
                 new BigDecimal("37.5000000"),
@@ -103,7 +103,7 @@ class WifiRepositoryTest {
     void 와이파이_비밀번호를_수정한다() {
         // arrange
         Store store = storeRepository.save(new Store(
-                "naver-place-789",
+
                 "이디야커피 선릉점",
                 "서울시 강남구 선릉로 789",
                 new BigDecimal("37.5045000"),
