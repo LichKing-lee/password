@@ -1,12 +1,13 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:test
-    driver-class-name: org.h2.Driver
+    url: jdbc:tc:mysql:8.4:///password?TC_REUSABLE=true
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
   jpa:
     hibernate:
       ddl-auto: create-drop
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
         show_sql: false
 
 decorator:

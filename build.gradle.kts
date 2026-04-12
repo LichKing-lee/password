@@ -25,6 +25,10 @@ subprojects {
     dependencies {
         compileOnly("org.projectlombok:lombok")
         annotationProcessor("org.projectlombok:lombok")
+        testImplementation(platform("org.testcontainers:testcontainers-bom:1.20.4"))
+        testImplementation("org.springframework.boot:spring-boot-testcontainers")
+        testImplementation("org.testcontainers:junit-jupiter")
+        testImplementation("org.testcontainers:mysql")
     }
 
     tasks.named<Test>("test") {
