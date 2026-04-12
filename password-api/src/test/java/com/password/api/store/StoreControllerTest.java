@@ -1,15 +1,13 @@
 package com.password.api.store;
 
+import com.password.api.PasswordMvcTest;
 import com.password.domain.store.Store;
 import com.password.domain.store.StoreRepository;
 import com.password.domain.wifi.Wifi;
 import com.password.domain.wifi.WifiRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.assertj.MvcTestResult;
 
@@ -17,9 +15,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
+@PasswordMvcTest
 class StoreControllerTest {
 
     @Autowired
