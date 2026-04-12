@@ -1,5 +1,96 @@
 # API 스펙
 
+## 상점 범위 검색
+
+지도 화면의 사각형 영역(BBox) 안에 위치한 상점 목록을 조회한다.
+
+### Request
+
+```
+GET /api/stores?minLat={minLat}&maxLat={maxLat}&minLng={minLng}&maxLng={maxLng}&limit={limit}
+```
+
+#### Query Parameters
+
+| 필드     | 타입       | 필수 | 기본값 | 설명                                  |
+|----------|------------|------|--------|---------------------------------------|
+| minLat   | BigDecimal | O    | -      | 위도 최소값 (남쪽 경계)               |
+| maxLat   | BigDecimal | O    | -      | 위도 최대값 (북쪽 경계)               |
+| minLng   | BigDecimal | O    | -      | 경도 최소값 (서쪽 경계)               |
+| maxLng   | BigDecimal | O    | -      | 경도 최대값 (동쪽 경계)               |
+| limit    | int        | X    | 100    | 최대 결과 개수 (1 ~ 500)              |
+
+#### 제약
+
+- `minLat <= maxLat`, `minLng <= maxLng` 이어야 한다.
+- BBox 의 위도 차(`maxLat - minLat`)와 경도 차(`maxLng - minLng`) 는 각각 0.5 이하여야 한다 (지나치게 넓은 검색 방지).
+- `limit` 은 1 이상 500 이하여야 한다.
+
+#### 예시
+
+```
+GET /api/stores?minLat=37.4900000&maxLat=37.5100000&minLng=127.0200000&maxLng=127.0500000&limit=100
+```
+
+### Response
+
+#### 성공 (200 OK)
+
+| 필드               | 타입       | 설명          |
+|--------------------|------------|---------------|
+| stores             | Array      | 상점 목록     |
+| stores[].storeId   | Long       | 상점 ID       |
+| stores[].name      | String     | 상점명        |
+| stores[].address   | String     | 주소          |
+| stores[].latitude  | BigDecimal | 위도          |
+| stores[].longitude | BigDecimal | 경도          |
+
+```json
+{
+  "stores": [
+    {
+      "storeId": 1,
+      "name": "스타벅스 강남점",
+      "address": "서울시 강남구 테헤란로 123",
+      "latitude": 37.4979462,
+      "longitude": 127.0276368
+    },
+    {
+      "storeId": 2,
+      "name": "이디야커피 선릉점",
+      "address": "서울시 강남구 선릉로 789",
+      "latitude": 37.5045000,
+      "longitude": 127.0490000
+    }
+  ]
+}
+```
+
+검색 결과가 없으면 빈 배열을 반환한다.
+
+```json
+{
+  "stores": []
+}
+```
+
+#### 실패 — 잘못된 파라미터 (400 Bad Request)
+
+다음과 같은 경우 400 으로 응답한다.
+
+- 필수 파라미터가 누락된 경우
+- `minLat > maxLat` 또는 `minLng > maxLng`
+- BBox 위/경도 차가 0.5 를 초과하는 경우
+- `limit` 이 1 미만이거나 500 초과인 경우
+
+```json
+{
+  "message": "잘못된 검색 범위입니다."
+}
+```
+
+---
+
 ## 상점 등록
 
 상점을 등록한다. 이미 등록된 상점(위경도 + 상점명 기준)이면 기존 상점을 반환한다.
