@@ -2,11 +2,6 @@ server:
   port: ${PORT:8080}
 
 spring:
-  servlet:
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
   application:
     name: password
   profiles:
