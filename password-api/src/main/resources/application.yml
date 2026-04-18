@@ -1,14 +1,17 @@
+server:
+  port: ${PORT:8080}
+
 spring:
   application:
     name: password
   datasource:
-    url: jdbc:mysql://localhost:3306/password?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul
-    username: password
-    password: password
+    url: ${DB_URL:jdbc:mysql://localhost:3306/password?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul}
+    username: ${DB_USERNAME:password}
+    password: ${DB_PASSWORD:password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
